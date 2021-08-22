@@ -80,9 +80,10 @@ def stations():
     # Query for the stations:
     stations = session.query(Station.station).all()
 
+    session.close()
     # Return a JSON list of stations from the dataset.
     return jsonify(stations)
-    
+
 @app.route("/api/v1.0/tobs")
 def tobs():
     # Create our session (link) from Python to the DB
@@ -90,6 +91,22 @@ def tobs():
 
     # Query the dates and temperature observations of the most 
     # active station for the last year of data.
+    temp_data = session.query(Measurement.date, Measurement.tobs).\
+    filter(Measurement.date >= query_date).\
+    filter(Measurement.station == 'USC00519281').\
+    order_by(Measurement.date).all()
+
+    session.close()
+    
+    temperatures =[]
+    for date, tobs in temp_data:
+        temperature_dict = {}
+        temperature_dict['date'] = date
+        temperature_dict['tobs'] = temperature
+        temperature.append(temperature_dict)
+
+    return jsonify(temperature_dict)
+
     # Return a JSON list of temperature observations 
     # (TOBS) for the previous year.
 
