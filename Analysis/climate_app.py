@@ -77,8 +77,12 @@ def stations():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    # Return a JSON list of stations from the dataset.
+    # Query for the stations:
+    stations = session.query(Station.station).all()
 
+    # Return a JSON list of stations from the dataset.
+    return jsonify(stations)
+    
 @app.route("/api/v1.0/tobs")
 def tobs():
     # Create our session (link) from Python to the DB
