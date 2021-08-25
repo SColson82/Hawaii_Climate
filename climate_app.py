@@ -135,12 +135,13 @@ def temp_start(start="YYYY-MM-DD"):
         filter(Measurement.date >= start).all()
     max = session.query(Measurement.station, Measurement.date, func.max(Measurement.tobs)).\
         filter(Measurement.date >= start).all()
-    avg = session.query(Measurement.station, Measurement.date, func.avg(Measurement.tobs)).\
+    avg = session.query(func.avg(Measurement.tobs)).\
         filter(Measurement.date >= start).all()
 
     session.close()
 
-    return jsonify(min, max, avg)
+    return jsonify(
+        f"From your chosen start date, the lowest recorded temp was:{min}, the highest recorded temp was:{max}, and the average over-all temp was:{avg}. Enjoy your vacation!")
 
     # Return a JSON list of the minimum temperature, the average 
     # temperature, and the max temperature for a given start or start-end range.
@@ -155,16 +156,16 @@ def temp_start_end(start="YYYY-MM-DD", end="YYYY-MM-DD"):
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    start = session.query(Station.name, Measurement.date, Measurement.prcp).\
-        filter(Station.station == Measurement.station).\
-        filter(Measurement.date >= start).\
-        filter(Measurement.date <= end).\
-        order_by(Measurement.date).\
-        filter(Measurement.prcp >= 0.0).all()
+    min = session.query(Measurement.station, Measurement.date, func.min(Measurement.tobs)).\
+        filter(Measurement.date >= start).filter(Measurement.date <= end).all()
+    max = session.query(Measurement.station, Measurement.date, func.max(Measurement.tobs)).\
+        filter(Measurement.date >= start).filter(Measurement.date <= end).all()
+    avg = session.query(func.avg(Measurement.tobs)).\
+        filter(Measurement.date >= start).filter(Measurement.date <= end).all()
 
     session.close()
 
-    return jsonify(start)
+    return jsonify(f"From your chosen start dateto your chosen end date, the lowest recorded temp was:{min}, the highest recorded temp was:{max}, and the average over-all temp was:{avg}. Enjoy your vacation!")
 
 
 # 4. Define main behavior
