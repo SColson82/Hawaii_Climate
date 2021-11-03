@@ -18,3 +18,10 @@ Once this was completed, an app was created using Flask to share the information
 
 A couple notes: the notebook may be viewed through the Analysis folder, the images in this README have been saved in the static folder, and the app is accessed as climate_app.py. 
 
+<hr>
+
+Contact:
+
+* https://www.linkedin.com/in/sharon-colson-515222210/
+* sharon.colson@gmail.com
+
